@@ -165,7 +165,11 @@ h2o.uploadFile <- function(path, destination_frame = "",
 
   .h2o.gc()  # Clear out H2O to make space for new file
   path <- normalizePath(path, winslash = "/")
-  srcKey <- .key.make( path )
+  srcKey <- if (is.null(destination_frame)) {
+    .key.make(path)
+  } else {
+    destination_frame
+  }
   urlSuffix <- sprintf("PostFile?destination_frame=%s",  curlEscape(srcKey))
   verbose <- getOption("h2o.verbose", FALSE)
   if (verbose) pt <- proc.time()[[3]]
